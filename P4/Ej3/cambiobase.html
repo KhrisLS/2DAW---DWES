@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ej3</title>
+</head>
+<body>
+    <h1>CONVERSOR NUMERICO</h1>
+    <form action="cambiobase.php" method="GET">
+        <label for="decimal">Número Decimal: </label>
+        <input type="text" name="decimal"><br><br>
+        <label for="operacion">Convertir a: </label><br>
+        <input type="radio" name="operacion" value="binario">Binario <br>
+        <input type="radio" name="operacion" value="octal">Octal <br>
+        <input type="radio" name="operacion" value="hexadecimal">Hexadecimal <br>
+        <input type="radio" name="operacion" value="todos">Todos Sistemas <br><br>
+        <button type="submit">Enviar</button>
+        <button type="reset">Borrar</button>
+    </form>
+</body>
+</html>

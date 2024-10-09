@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ej1</title>
+</head>
+<body>
+    <h1>CALCULADORA</h1>
+    <form action="calculadora.php" method="GET">
+        <label for="operando1">Operando1: </label>
+        <input type="text" name="operando1"><br>
+        <label for="operando2">Operando2: </label>
+        <input type="text" name="operando2"><br>
+        <label for="operacion">Selecciona operación: </label><br>
+        <input type="radio" name="operacion" value="suma">Suma <br>
+        <input type="radio" name="operacion" value="resta">Resta <br>
+        <input type="radio" name="operacion" value="producto">Producto <br>
+        <input type="radio" name="operacion" value="division">División <br><br>
+        <button type="submit">Enviar</button>
+        <button type="reset">Borrar</button>
+    </form>
+</body>
+</html>
