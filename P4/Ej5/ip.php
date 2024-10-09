@@ -3,9 +3,8 @@
 <h1>IPs</h1>
 <?php
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        $num =  test_input($_POST["numero"]);
-        $base =  test_input($_POST["base"]);
-        convertir($num, $base);
+        $num = test_input($_POST["numero"]);
+        validarIP($num);
     }
 
     function test_input($data) {
@@ -15,14 +14,36 @@
         return $data;
     }
 
-    function convertir($num, $base) {
-        $partes = explode("/",$num);
-        $numero = $partes[0];
-        $baseOriginal = $partes[1];
+    function validarIP($num) {
+        if (filter_var($num, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
+            convertir($num);
+        } else {
+            echo "<p style='color:red;'>IP no válida</p>";
+        }
+    }
 
-        $resultado = base_convert($numero, $baseOriginal, $base);
+    function convertir($num) {
+        $octetos = explode(".",$num);
+        $octetoBinarios = [];
 
-        echo "Número $numero en base $baseOriginal = $resultado en base $base";
+        foreach ($octetos as $oct){
+            $binario = decbin($oct);
+            $binario = str_pad($binario, 8, "0", STR_PAD_LEFT);
+            $octetoBinarios[] = $binario;
+        }
+
+        $cadena = implode(".", $octetoBinarios);
+
+        imprimirBinarios($cadena, $num); 
+    }
+
+    function imprimirBinarios($cadena, $num) {
+        echo "
+            <label for='numero'>IP de notación decimal: </label>
+            <input type='text' name='numero' value='$num' readonly><br><br>
+            <label for='numero'>IP Binario: </label>
+            <input type='text' name='numero' value='$cadena' size='35' readonly><br><br>
+        ";
     }
 ?>
 </body>
