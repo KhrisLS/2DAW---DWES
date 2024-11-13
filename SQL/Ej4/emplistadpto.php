@@ -21,7 +21,6 @@ include ("../funciones.php");
         </select>
         <br><br>
         <button type="submit">Ver empleados</button>
-        <button type="reset">Borrar</button>
     </form>
 
     <?php
