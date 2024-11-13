@@ -31,6 +31,14 @@ include ("../funciones.php");
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $dni = test_input($_POST['dni']);
             $porcentaje = test_input($_POST['porcentaje']);
+
+            if(empty($dni)){
+                trigger_error("No se ha seleccionado un empleado.", E_USER_ERROR);
+            }
+            
+            if(empty($porcentaje)){
+                trigger_error("No se ha rellenado el campo porcentaje.", E_USER_ERROR);
+            }
             
             actualizarSalario($dni, $porcentaje);
         }

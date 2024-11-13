@@ -20,8 +20,12 @@
         include ("../errores.php");
         include ("../funciones.php");
 
-        if (isset($_POST['nombre']) && !empty($_POST['nombre'])) {
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $nombre = test_input($_POST['nombre']);
+
+            if (empty($nombre)) {
+                trigger_error("No se ha rellenado el campo.", E_USER_ERROR);
+            }
             
             $dpto = buscarUltimoDpto();
             $cod_dpto = generarCodDpto($dpto); 

@@ -34,6 +34,10 @@ include ("../funciones.php");
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $dni = test_input($_POST['dni']);
             $codDpto = test_input($_POST['cod_dpto']);
+
+            if (empty($dni) || empty($codDpto)) {
+                trigger_error("Se deben seleccionar ambos campos.", E_USER_ERROR);
+            }
             
             cambioDpto($dni, $codDpto);
         }

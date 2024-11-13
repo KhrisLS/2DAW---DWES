@@ -40,8 +40,8 @@ include ("../funciones.php");
             $fechaNacimiento = test_input($_POST['fechaNacimiento']);
             $codDpto = test_input($_POST['cod_dpto']);
 
-            if (empty($dni) || empty($nombre) || empty($salario) || empty($fechaNacimiento) || empty($codDpto)) {
-                trigger_error("Todos los campos son obligatorios", E_USER_ERROR);
+            if (empty($dni) || empty($nombre) || empty($salario) || empty($fechaNacimiento)) {
+                trigger_error("Se deben rellenar todos los campos.", E_USER_ERROR);
             }
             
             altaEmpleado($dni, $nombre, $salario, $fechaNacimiento, $codDpto);

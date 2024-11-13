@@ -26,6 +26,10 @@ include ("../funciones.php");
     <?php
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $codDpto = test_input($_POST['cod_dpto']);
+
+            if(empty($codDpto)) {
+                trigger_error("No se ha seleccionado un departamento.", E_USER_ERROR);
+            }
             
             listaEmpleadosPorDpto($codDpto);
         }

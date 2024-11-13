@@ -78,6 +78,9 @@ function altaEmpleado($dni, $nombre, $salario, $fechaNacimiento, $codDpto){
                 echo "<p>Empleado asignado correctamente al departamento</p>";
             }
         }
+        else {
+            echo "<p>No pertenece a ningun departamento</p>";
+        }
     }
 }
 
@@ -98,13 +101,13 @@ function listaEmpleados(){
 }
 
 function cambioDpto($dni, $codDpto){
-    $sql = "UPDATE emple_dpto SET fecha_fin = CURRENT_DATE WHERE dni = :dni AND fecha_fin IS NULL";
+    $sql = "UPDATE emple_dpto SET fecha_fin = NOW() WHERE dni = :dni AND fecha_fin IS NULL";
     $valores = [':dni' => $dni];
     
     $valido = conexionBD($sql, $valores);
 
     if ($valido) {
-        $sql = "INSERT INTO emple_dpto (dni, cod_dpto, fecha_ini, fecha_fin) VALUES (:dni, :cod_dpto, CURRENT_DATE, NULL)";
+        $sql = "INSERT INTO emple_dpto (dni, cod_dpto, fecha_ini, fecha_fin) VALUES (:dni, :cod_dpto, NOW(), NULL)";
         $valores = [':dni' => $dni, ':cod_dpto' => $codDpto];
         
         $valido = conexionBD($sql, $valores);
@@ -136,7 +139,7 @@ function listaEmpleadosPorDpto($codDpto){
 }
 
 function historicoEmpleadosPorDpto($codDpto){
-    $sql = "SELECT emple2.dni, emple2.nombre FROM emple2, emple_dpto WHERE emple2.dni = emple_dpto.dni AND emple_dpto.cod_dpto = :cod_dpto AND emple_dpto.fecha_fin IS NOT NULL";
+    $sql = "SELECT DISTINCT emple2.dni, emple2.nombre FROM emple2, emple_dpto WHERE emple2.dni = emple_dpto.dni AND emple_dpto.cod_dpto = :cod_dpto AND emple_dpto.fecha_fin IS NOT NULL";
     $valores = [':cod_dpto' => $codDpto];
 
     $result = conexionBD($sql, $valores);
