@@ -28,7 +28,6 @@ include ("../funciones.php");
         </select>
         <br><br>
         <button type="submit">Cambiar</button>
-        <button type="reset">Borrar</button>
     </form>
 
     <?php
