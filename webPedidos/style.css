@@ -1,0 +1,58 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+}
+header {
+    border-top: 1px solid #fff;
+    background-color: #d35400; 
+    color: #fff;
+    text-align: center;
+    padding: 2rem;
+}
+nav {
+    border-top: 1px solid #fff;
+    background-color: #d35400;
+    display: flex;
+    justify-content: center;
+    padding: 2rem 0;
+}
+a {
+    text-decoration: none;
+    color: #fff;
+    padding: 10px 20px;
+    margin: 0 5px;
+    background-color: #d35400;
+    border-radius: 15px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+a:hover {
+    background-color: #a04000;
+    color: #fff;
+}
+#bienvenida {
+    background-color: #d35400;
+    color: #fff;
+    text-align: center;
+    padding: 0.5em 4em;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+#bienvenida p {
+    font-size: 1.3rem;
+}
+#bienvenida button {
+    font-size: 1rem;
+    background-color: #a04000;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 15px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+#bienvenida button:hover {
+    background-color: #803000;
+    color: #fff;
+}
