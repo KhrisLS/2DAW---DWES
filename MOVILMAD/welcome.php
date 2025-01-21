@@ -3,5 +3,5 @@
 require_once("db/db.php");
 
 // Llamada al controlador
-require_once("controllers/movlogin_controller.php");
+require_once("controllers/movwelcome_controller.php");
 ?>

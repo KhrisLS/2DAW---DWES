@@ -1,5 +1,4 @@
 <?php
-echo "Inicio db.php"."<br>";
     require_once("movconfig.php");
 
 	$servername = DB_SERVER;
@@ -14,5 +13,4 @@ echo "Inicio db.php"."<br>";
 		echo $ex->getMessage(); 	 	 	 	 	 	
 	}
 	
-echo "finaliza db.php"."<br>";
 ?>

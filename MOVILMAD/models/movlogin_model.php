@@ -1,6 +1,7 @@
 <?php
   require_once('db/funciones.php');
 
+  //buscar cliente por su EMAIL
   function comprobarEmail($email) {
     $sql = "SELECT *
             FROM rclientes

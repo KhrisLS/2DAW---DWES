@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
      <title>Bienvenido a MovilMAD</title>
-    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
  </head>
    
  <body>
@@ -21,13 +21,14 @@
 	<!-- INICIO DEL FORMULARIO -->
 	<form action="" method="post">
 	
-		<B>Bienvenido/a:</B>  <BR><BR>
-		<B>Identificador Cliente:</B>   <BR><BR>
+		<B>Bienvenido/a:</B>  <?php echo htmlspecialchars($_SESSION['usuario']['nombre']); ?> <BR><BR>
+		<B>Identificador Cliente:</B>   <?php echo htmlspecialchars($_SESSION['usuario']['idcliente']); ?> <BR><BR>
 		
 		<B>Vehiculos disponibles en este momento:</B>  <BR><BR>
 		
-			<B>Matricula/Marca/Modelo: </B><select name="vehiculos" class="form-control">
-				
+			<B>Matricula/Marca/Modelo: </B>
+			<select name="matricula" class="form-control">
+				<?php  listaVehiculos(); ?>
 			</select>
 			
 		

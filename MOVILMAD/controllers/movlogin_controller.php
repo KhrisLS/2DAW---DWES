@@ -1,16 +1,16 @@
 <?php
+
 require_once ("models/movlogin_model.php");
 require_once ("controllers/funciones_controller.php");
 require_once('views/movlogin.php');
 
-// Redirigir al welcome si existe una sesion
+// En caso de que ya tenga la sesión iniciada redirigir al welcome
 if (isset($_SESSION['usuario'])) {
-  header("Location: views/movwelcome.php"); // Redirigir 
+  header("Location: welcome.php"); // Redirigir 
   exit();
 }else{
   cerrarSesion();
 }
-
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     var_dump($password);
 
     login($email, $password);
-    header('Location: views/movwelcome.php');
+    header('Location: welcome.php');
     exit();
 }
 
@@ -46,7 +46,10 @@ function login($email, $password) {
 
     
     session_start();
-    $_SESSION['usuario'] = $cliente['idcliente'];
+    $_SESSION['usuario'] = [
+      'idcliente' => $cliente['idcliente'],
+      'nombre' => $cliente['nombre']
+    ];
   }
 
 ?>
