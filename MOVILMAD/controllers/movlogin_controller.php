@@ -17,8 +17,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-    var_dump($email);
-    var_dump($password);
+    $email = test_input($email);
+    $password = test_input($password);
 
     login($email, $password);
     header('Location: welcome.php');
@@ -31,7 +31,7 @@ function login($email, $password) {
 
     $cliente = comprobarEmail($email);
     
-    //---------------------COMPROBACIONES DE ERROR--------------------------------
+    //======================= COMPROBACIONES DE ERROR ===========================
     //contraseña incorrecta o usuario inexistente
     if (empty($cliente) || $password != $cliente['idcliente'])
       trigger_error('Login inválido', E_USER_WARNING);

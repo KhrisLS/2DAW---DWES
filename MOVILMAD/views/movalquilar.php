@@ -24,7 +24,7 @@
 		<B>Bienvenido/a:</B>  <?php echo htmlspecialchars($_SESSION['usuario']['nombre']); ?> <BR><BR>
 		<B>Identificador Cliente:</B>   <?php echo htmlspecialchars($_SESSION['usuario']['idcliente']); ?> <BR><BR>
 		
-		<B>Vehiculos disponibles en este momento:</B>  <BR><BR>
+		<B>Vehiculos disponibles en este momento:</B> <?php  disponibleFechaHora(); ?> <BR><BR>
 		
 			<B>Matricula/Marca/Modelo: </B>
 			<select name="matricula" class="form-control">
