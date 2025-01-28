@@ -34,6 +34,11 @@
             // Vaciar el carrito
             vaciarCesta();
         }
+
+        if (isset($_POST['volver'])){
+            header("Location: welcome.php");
+            exit();
+        }
     }
 
 

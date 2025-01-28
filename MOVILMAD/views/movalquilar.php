@@ -37,6 +37,7 @@
 			<input type="submit" value="Agregar a Cesta" name="agregar" class="btn btn-warning disabled">
 			<input type="submit" value="Realizar Alquiler" name="alquilar" class="btn btn-warning disabled">
 			<input type="submit" value="Vaciar Cesta" name="vaciar" class="btn btn-warning disabled">
+			<input type="submit" value="Volver" name="volver" class="btn btn-warning disabled">
 		</div>		
 	</form>
 	<!-- FIN DEL FORMULARIO -->

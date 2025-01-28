@@ -10,29 +10,22 @@
     return operarBd($sql, $valores);
   }
 
-  function consultarPrecioBaseYFechaAlquiler($matricula){
-    $sql = "SELECT v.preciobase, r.fecha_alquiler
-            FROM rvehiculos v
-            JOIN ralquileres r ON v.matricula = r.matricula
-            WHERE v.matricula = :matricula";
+  function consultarPrecioBase($matricula){
+    $sql = "SELECT preciobase
+            FROM rvehiculos
+            WHERE matricula = :matricula";
     $valores = ['matricula' => $matricula];
     return operarBd($sql, $valores);
   }
 
-  function devolverVehiculo($matricula, $precioBase, $fechaAlquiler){
-    $sql = "UPDATE ralquileres 
-            SET fecha_devolucion = NOW(), preciototal = :preciobase * TIMESTAMPDIFF(MINUTE, :fecha_alquiler, NOW()), fechahorapago = NOW()
-            WHERE matricula = :matricula";
-    $valores = ['preciobase' => $precioBase, 'fecha_alquiler' => $fechaAlquiler, 'matricula' => $matricula];
-    return operarBD($sql, $valores);
+  function calcularTiempoAlquilado($matricula){
+    $sql = "SELECT TIMESTAMPDIFF(MINUTE, fecha_alquiler, NOW()) AS diferencia_minutos
+            FROM ralquileres
+            WHERE matricula = :matricula AND fecha_devolucion IS NULL";
+    $valores = ['matricula' => $matricula];
+    return operarBd($sql, $valores);
   }
 
-  function actualizarDisponibilidadVehiculo($matricula, $disponible) {
-    $sql = "UPDATE rvehiculos
-            SET disponible = :disponible
-            WHERE matricula = :matricula";
-    $args = [':matricula' => $matricula, ':disponible' => $disponible];
-    return operarBd($sql, $args);
-  }
+  
   
 ?>
