@@ -3,6 +3,42 @@
     require_once ("controllers/funciones_controller.php");
     require_once("views/movalquilar.php");
 
+    // Verificar si el formulario fue enviado y qué botón se presionó
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $matricula = $_POST['matricula'];
+        $matricula = test_input($matricula);
+        $cliente = $_SESSION['usuario']['idcliente'];
+
+        if (isset($_POST['agregar'])) {
+            if (empty($matricula)) {
+                trigger_error("No se ha seleccionado un vehículo.", E_USER_WARNING);
+            }   
+
+            crearCookieCesta($matricula);
+        }
+
+
+        if (isset($_POST['alquilar'])) {
+            // Procesar la solicitud de alquiler (puedes agregar la lógica de alquiler aquí)
+            $valido = comprobarListadoAlquileres($cliente);
+
+            if($valido){
+                alquilarVehiculos($cliente);
+            }else{
+                trigger_error("Máximo alquileres alcanzados (3 por cliente).", E_USER_WARNING);
+            }
+        }
+
+        
+        if (isset($_POST['vaciar'])) {
+            // Vaciar el carrito
+            vaciarCesta();
+        }
+    }
+
+
+    //============================================== FUNCIONES =================================================
+
     function disponibleFechaHora(){
         echo fechaHoraActual();
     }
@@ -19,73 +55,47 @@
         }
     }
 
-    
-    // Verificar si el formulario fue enviado y qué botón se presionó
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $matricula = $_POST['matricula'];
-        $matricula = test_input($matricula);
-
-        if (isset($_POST['agregar'])) {
-            if (empty($matricula)) {
-                trigger_error("No se ha seleccionado un vehículo.", E_USER_WARNING);
-            }   
-            
-            crearCookieCesta($matricula);
-
-        }
-
-
-        if (isset($_POST['alquilar'])) {
-            // Procesar la solicitud de alquiler (puedes agregar la lógica de alquiler aquí)
-            
-        }
-
-        
-        if (isset($_POST['vaciar'])) {
-            // Vaciar el carrito
-            
-        }
-    }
-
-
-    //============================================== FUNCIONES =================================================
-
     function crearCookieCesta($matricula) {
         
         $nombreCookie = 'cesta_' . $_SESSION['usuario']['nombre'];
         $cesta = obtenerCesta();
-        $productoEncontrado = false;
+        $vehiculoEncontrado = false;
 
-        
+         // Limitar la cesta a un máximo de 3 vehículos
+        if (count($cesta) >= 3) {
+            echo "La cesta está completa (Máximo 3 vehículos).";
+            listarCesta($cesta);
+            return;
+        }
     
         // Buscar si el producto ya existe en la cesta
-        foreach ($cesta as &$vehiculo) {
-            if ($producto[0] === $matricula) {
-                $producto[1] = $marca; 
-                $producto[2] = $modelo;
-                $productoEncontrado = true;
+        foreach ($cesta as $vehiculo) {
+            if ($vehiculo === $matricula) {
+                echo "Ya existe en la cesta un vehículo con la matrícula $matricula";
+                $vehiculoEncontrado = true;
                 break;
             }
         }
     
-        // Si no existe, añadirlo
-        if (!$productoEncontrado) {
-            $nuevoProducto = [$productCode, $cantidad, $precio];
-            $cesta[] = $nuevoProducto;
+        // Si el vehículo no está en la cesta, lo añadimos
+        if (!$vehiculoEncontrado) {
+            $nuevoVehiculo = $matricula;
+            $cesta[] = $nuevoVehiculo;
+            echo "Vehículo añadido correctamente.";
         }
-        
-        var_dump($cesta);
         
         // Serializar el cesta
         $cestaSerializado = serialize($cesta);
         
         // Crear o actualizar la cookie con duración de 7 días
         setcookie($nombreCookie, $cestaSerializado, time() + (7 * 24 * 60 * 60), "/");
+
+        listarCesta($cesta);
     }
 
     function obtenerCesta() {
         
-        $nombreCookie = 'cesta_' . $_SESSION['usuario'];
+        $nombreCookie = 'cesta_' . $_SESSION['usuario']['nombre'];
     
         if (isset($_COOKIE[$nombreCookie])) {
             $cesta = unserialize($_COOKIE[$nombreCookie]);
@@ -101,4 +111,75 @@
         return $cesta;
     }
 
+    function vaciarCesta() {
+        // Asegúrate de que la sesión esté iniciada
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+    
+        $nombreCookie = 'cesta_' . $_SESSION['usuario']['nombre'];
+        setcookie($nombreCookie, '', time() - 3600, "/"); // Eliminar cookie
+        echo "<p>La cesta ha sido vaciada.</p>";
+    }
+
+    function listarCesta($cesta){
+        echo "<br><br>";
+        echo "<table class='table table-bordered'>";
+        echo "<thead>";
+        echo "<tr>";
+        echo "<th>Matrícula</th>";
+        echo "<th>Marca</th>";
+        echo "<th>Modelo</th>";
+        echo "</tr>";
+        echo "</thead>";
+        echo "<tbody>";
+
+        // Iterar sobre los elementos de la cesta
+        foreach ($cesta as $vehiculo) {
+            $datos = detallesVehiculo($vehiculo);
+            $marca = $datos[0]['marca'];
+            $modelo = $datos[0]['modelo'];
+            echo "<tr>";
+            echo "<td>" . htmlspecialchars($vehiculo) . "</td>";
+            echo "<td>" . htmlspecialchars($marca) . "</td>";
+            echo "<td>" . htmlspecialchars($modelo) . "</td>";
+            echo "</tr>";
+        }
+
+        echo "</tbody>";
+        echo "</table>";
+    }
+
+    function comprobarListadoAlquileres($cliente){
+        $resultado = alquilerPorPersona($cliente);
+        $valido = false;
+        // Número de alquileres
+        $totalAlquileres = (int)$resultado[0]['total_alquileres'];
+
+        // Verificar si el cliente tiene menos de 3 alquileres
+        if ($totalAlquileres >= 3) {
+            $valido = false; // No puede alquilar
+        } else {
+            $valido = true; // Puede alquilar
+        }
+
+        return $valido;
+    }
+
+    function alquilarVehiculos($cliente){
+        $cesta = obtenerCesta();
+
+        foreach($cesta as $vehiculo){
+            $valido = realizarAlquiler($cliente, $vehiculo);
+            if ($valido) {
+                actualizarDisponibilidadVehiculo($vehiculo, 'N');
+                echo "<p>Vehiculo $vehiculo alquilado correctamente</p>";
+            } else {
+                echo "<p>Error al alquilar el vehículo $vehiculo</p>";
+            }
+        }
+
+        // Vaciar la cesta
+        vaciarCesta();
+    }
 ?>
